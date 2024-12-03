@@ -1,9 +1,21 @@
 package main
 
-// здесь надо написать код
+import (
+	"fmt"
+	"net/http"
+)
 
-func main() {
-	// и здесь тоже
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		fmt.Fprint(w, "Hello, stranger!")
+		return
+	}
+	fmt.Fprintf(w, "Hello, %s!", name)
 }
 
-// и тут тоже (если очень надо)
+func main() {
+	http.HandleFunc("/api/user", helloHandler)
+	fmt.Println("Server is listening on port 8080")
+	http.ListenAndServe(":8080", nil)
+}
